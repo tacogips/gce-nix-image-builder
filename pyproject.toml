@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gce"
+version = "0.1.0"
+description = "A Python project"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = []
+
+
+[project.urls]
+Homepage = "https://github.com/user/repo"
+Repository = "https://github.com/user/repo"
+
+[project.scripts]
+"gce" = "gce.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-cov>=6.0.0",
+  "ruff>=0.11.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gce"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
