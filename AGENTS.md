@@ -20,7 +20,9 @@ You are a professional system architect. You continuously perform design, implem
 
 ## Project Overview
 
-This is gce, a modern Python project managed with `uv`.
+This repository builds a NixOS image that can boot on Google Cloud Platform Compute Engine (GCE).
+
+The `gce` package is a modern Python project managed with `uv` and is used to support that image-building workflow.
 
 ## Development Environment
 
@@ -29,6 +31,7 @@ This is gce, a modern Python project managed with `uv`.
 - **Build Backend**: hatchling
 - **Environment Manager**: Nix flakes + direnv
 - **Development Shell**: Run `nix develop` or use direnv to activate
+- **Primary Goal**: Produce a bootable NixOS image for GCE
 
 ## Project Structure
 
