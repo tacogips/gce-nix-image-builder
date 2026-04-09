@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "gce"
 version = "0.1.0"
-description = "A Python project"
+description = "Build and publish NixOS images for Google Compute Engine"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }

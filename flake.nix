@@ -1,6 +1,6 @@
 {
 
-  description = "A Python project";
+  description = "Build and publish a NixOS image for Google Compute Engine";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
@@ -16,13 +16,29 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
         python = pkgs.python312;
+        imageSystem = "x86_64-linux";
+        gceImageSystem = nixpkgs.lib.nixosSystem {
+          system = imageSystem;
+          modules = [
+            ./nix/gce-image.nix
+          ];
+        };
       in
       {
+        packages.gceImage = gceImageSystem.config.system.build.googleComputeImage;
+
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
+            curl
+            direnv
             python
+            terraform
+            ruff
             uv
             go-task
             gh
@@ -30,6 +46,7 @@
             gnused
             google-cloud-sdk
             jq
+            openssh
             qemu
           ];
 

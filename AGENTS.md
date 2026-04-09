@@ -24,6 +24,8 @@ This repository builds a NixOS image that can boot on Google Cloud Platform Comp
 
 The `gce` package is a modern Python project managed with `uv` and is used to support that image-building workflow.
 
+Published Compute Engine images in this repository should, unless the user explicitly instructs otherwise, be shared so that any authenticated Google user or service account can use them. In Google Cloud terms, that means granting `roles/compute.imageUser` to `allAuthenticatedUsers` on the created image.
+
 ## Development Environment
 
 - **Language**: Python

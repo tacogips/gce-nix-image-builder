@@ -1,6 +1,5 @@
-"""Top-level package for gce."""
+"""Top-level package for the GCE image builder."""
 
+__all__ = ["__version__"]
 
-def greet(name: str) -> str:
-    """Return a friendly greeting for the supplied name."""
-    return f"Hello, {name}!"
+__version__ = "0.1.0"

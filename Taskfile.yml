@@ -24,6 +24,21 @@ tasks:
     cmds:
       - uv run python -m {{.PACKAGE_NAME}}
 
+  image-build:
+    desc: Build the GCE image tarball
+    cmds:
+      - uv run python -m {{.PACKAGE_NAME}} build
+
+  image-publish:
+    desc: Publish the GCE image to Google Cloud
+    cmds:
+      - uv run python -m {{.PACKAGE_NAME}} publish
+
+  instance-create:
+    desc: Create a GCE instance from the published image
+    cmds:
+      - uv run python -m {{.PACKAGE_NAME}} create-instance {{.CLI_ARGS}}
+
   test:
     desc: Run tests
     cmds:
