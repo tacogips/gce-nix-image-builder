@@ -9,12 +9,30 @@ Google user or service account can use it.
 The currently published sandbox image lives in project `sandbox-taco` and is exposed via
 image family `gce-nixos-sandbox`.
 
+As of `2026-04-09`, the current published sandbox resources are:
+
+- Image project: `sandbox-taco`
+- Image family: `gce-nixos-sandbox`
+- Latest image name: `gce-sandbox-web-20260409`
+- Artifact bucket: `sandbox-taco-gce-nixos-images`
+- Latest artifact object: `nixos-image-24.11.20250630.5ab036a-x86_64-linux.raw.tar.gz`
+- Image storage location: `us`
+- Sharing mode: `roles/compute.imageUser` granted to `allAuthenticatedUsers`
+
 ## Requirements
 
 - Nix with flakes enabled
 - Python 3.12 or newer
 - `uv`
 - `gcloud` authenticated for the target project
+
+For cross-account image consumption, the user also needs:
+
+- a Google account or service account authenticated with `gcloud`
+- a consumer Google Cloud project with billing enabled
+- permission in that consumer project to create Compute Engine instances
+- `roles/compute.osLogin` or equivalent IAM if they want to log in through OS Login
+- `iam.serviceAccounts.actAs` permission if they attach a non-default service account
 
 ## Local Development
 
@@ -68,7 +86,11 @@ If `--bucket`, `--family`, or `--image-name` are omitted, the CLI also checks
 ## Create A VM From The Published Image
 
 ```bash
-uv run python -m gce create-instance my-vm
+uv run python -m gce create-instance my-vm \
+  --project YOUR_CONSUMER_PROJECT_ID \
+  --zone us-central1-a \
+  --image-project sandbox-taco \
+  --image-family gce-nixos-sandbox
 ```
 
 The `create-instance` subcommand uses repository defaults from environment variables when
@@ -113,6 +135,20 @@ gcloud compute instances create my-vm \
   --tags http-server
 ```
 
+To pin the exact currently published image instead of following the family:
+
+```bash
+gcloud compute instances create my-vm \
+  --project YOUR_CONSUMER_PROJECT_ID \
+  --zone us-central1-a \
+  --machine-type e2-micro \
+  --image gce-sandbox-web-20260409 \
+  --image-project sandbox-taco \
+  --network default \
+  --metadata enable-oslogin=TRUE \
+  --tags http-server
+```
+
 ## Using The Shared Image From Another Account
 
 Yes. The image is usable by people and service accounts that are not members of the
@@ -135,7 +171,7 @@ Typical cross-account usage looks like this:
 
 ```bash
 gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
+gcloud config set project YOUR_CONSUMER_PROJECT_ID
 gcloud compute instances create my-vm \
   --zone us-central1-a \
   --machine-type e2-micro \
@@ -148,8 +184,32 @@ gcloud compute instances create my-vm \
 Or through this repository CLI after setting the repo-scoped defaults:
 
 ```bash
-uv run python -m gce create-instance my-vm --project YOUR_PROJECT_ID
+export GCE_PROJECT=YOUR_CONSUMER_PROJECT_ID
+export GCE_IMAGE_PROJECT=sandbox-taco
+export GCE_IMAGE_FAMILY=gce-nixos-sandbox
+export GCE_DEFAULT_ZONE=us-central1-a
+uv run python -m gce create-instance my-vm
 ```
+
+If you want to pin the exact currently published image through this CLI instead of following
+the family:
+
+```bash
+export GCE_PROJECT=YOUR_CONSUMER_PROJECT_ID
+export GCE_IMAGE_PROJECT=sandbox-taco
+export GCE_IMAGE_NAME=gce-sandbox-web-20260409
+export GCE_DEFAULT_ZONE=us-central1-a
+uv run python -m gce create-instance my-vm
+```
+
+The Cloud Storage artifact is published at:
+
+```text
+gs://sandbox-taco-gce-nixos-images/nixos-image-24.11.20250630.5ab036a-x86_64-linux.raw.tar.gz
+```
+
+That artifact path is mainly useful for publishers and debugging. Consumers normally need
+only the image project plus either the image family or exact image name.
 
 ## Repository Defaults
 
@@ -177,6 +237,16 @@ configuration, OS Login support, and the raw tarball format expected by
 
 To use OS Login on instances created from the image, set `enable-oslogin=TRUE` at the
 instance or project metadata level in Google Cloud.
+
+The `create-instance` command in this repository already injects `enable-oslogin=TRUE`
+by default.
+
+The image enables `nginx` on port `80`, but external HTTP access still depends on the
+consumer project and network:
+
+- On the default VPC, the built-in `http-server` firewall rule is typically enough.
+- On a custom VPC, you must create your own ingress firewall rule for TCP `80`.
+- The default tag applied by this CLI is `http-server`.
 
 ## Flake Development Shell
 
