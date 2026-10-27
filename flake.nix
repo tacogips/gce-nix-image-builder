@@ -3,7 +3,7 @@
   description = "Build and publish a NixOS image for Google Compute Engine";
 
   inputs = {
-    nixpkgs.url = "github:tacogips/nixpkgs-security/d2a93d2fe7820d90eaa10af53891412ec3614f56";
+    nixpkgs.url = "github:tacogips/nixpkgs-security/51712f4618983456364dc94f66736f6a9f942f6c";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
