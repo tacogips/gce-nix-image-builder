@@ -1,0 +1,28 @@
+{
+  "files": [
+    ".envrc",
+    ".gitignore",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "README.md",
+    "Taskfile.yml",
+    "design-docs/references/README.md",
+    "design-docs/specs/architecture.md",
+    "design-docs/specs/command.md",
+    "design-docs/specs/notes.md",
+    "design-docs/user-qa/README.md",
+    "design-docs/user-qa/pending-example.md",
+    "design-docs/user-qa/qa-example.md",
+    "flake.nix",
+    "impl-plans/README.md",
+    "impl-plans/active/.gitkeep",
+    "impl-plans/completed/.gitkeep",
+    "impl-plans/templates/plan-template.md",
+    "pyproject.toml",
+    "src/gce/__init__.py",
+    "src/gce/__main__.py",
+    "src/gce/cli.py",
+    "src/gce/py.typed",
+    "tests/test_package.py"
+  ]
+}
