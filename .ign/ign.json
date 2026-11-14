@@ -1,0 +1,15 @@
+{
+  "template": {
+    "url": "https://github.com/tacogips/ign-template/python-v1",
+    "path": "python-v1",
+    "ref": "main"
+  },
+  "hash": "be04c89a18146d693a195fb34f80afa110471cbc5c8147fb37ab3dac0a816d6c",
+  "metadata": {
+    "generated_at": "2026-04-07T22:13:29.157029625+09:00",
+    "generated_by": "ign checkout",
+    "template_name": "python-v1",
+    "template_version": "1.0.0",
+    "ign_version": "0.1.14"
+  }
+}
